@@ -54,6 +54,6 @@ public class Search extends SpringServlet {
 		List<Person> list = hibernateDao.search(identityPerson);
 		
 		request.getSession().setAttribute("results", list);
-		response.sendRedirect("page.jsp");
+		response.sendRedirect("page.jsp#search");
 	}
 }

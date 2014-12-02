@@ -56,7 +56,8 @@
                     <li><a class="page-scroll" href="#create">Create</a></li>
                     <li><a class="page-scroll" href="#search">Search</a></li>
                     <li><a class="page-scroll" href="#list">List</a></li>       
-                    <li><a class="page-scroll" href="#modify">Update/Delete</a></li>    
+                    <li><a class="page-scroll" href="#update">Update</a></li>
+                    <li><a class="page-scroll" href="#delete">Delete</a></li>    
                     <li><a href="exit.jsp">Exit</a></li>                            
                 </ul>
             </div>
@@ -98,7 +99,7 @@
     <section id="create" class="content-section text-center">
         <div class="row">
 	        <div class="col-lg-8 col-lg-offset-2">
-	            <h2>Create Identity</h2>
+	            <h2>Create an Identity</h2>
 		        <p>To create a new identity, enter name, email address, and date of birth below</p>
 				<form class="form-horizontal" role="form" name="Createform" action="./Create"method="post">
 					<input name="fullName" type="text" class="form-control" id="fullName" placeholder="Full name"/>
@@ -125,7 +126,7 @@
 				<p>Results of your search:</p>	    
 				<form name="Resultsform">
 				  		 <div>
-				      		 <table class="table table-bordered">
+				      		 <table class="table">
 				          		<tr>
 				                <th>Unique ID</th>
 				                <th>Full Name</th>
@@ -179,26 +180,49 @@
         </div>
     </section>
     
-    <!-- Update/Delete Section -->
-    <section id="modify" class="content-section text-center">
+    <!-- Update Section -->
+    <section id="update" class="content-section text-center">
         <div class="row">
 	        <div class="col-lg-8 col-lg-offset-2">
-	            <h2>Modify Identity</h2>
-				<p> </p>
-		        <p>To update an identity, enter its unique ID.</p>       
-		        <form class="form-horizontal" role="form" name="GetUpdateform" action="./GetForUpdate"method="post">
-					<input name="uid" type="text" class="form-control" id="uid" placeholder="Unique ID"/>
-					<input type="submit" class="btn btn-primary" value=Submit>
-				</form>	
-				<p> </p>
+	            <h2>Update an Identity</h2>
+				<div id="updatediv">
+			        <p>To update an identity, enter its unique ID.</p>       
+			        <form class="form-horizontal" role="form" name="GetUpdateform" action="./GetForUpdate"method="post">
+						<input name="uid" type="text" class="form-control" id="uid" placeholder="Unique ID"/>
+						<input type="submit" class="btn btn-primary" value=Submit onclick="myFunction()"> 
+					</form>						
+				</div>
+				<div id="updateformdiv" style="display:none">
+                    <p>Update the identity information below:</p>
+					<form class="form-horizontal" role="form" name="Updateform" action="./Update"method="post">
+				    	<input name="uid" type="text" class="form-control" id="uid" value="${person.id}" readonly/>
+						<input name="fullName" type="text" class="form-control" id="fullName" value="${person.fullName}"/>
+						<input name="email" type="email" class="form-control" id="email" value="${person.email}"/>
+						<input name="birthDate" type="date" class="form-control" id="birthDate" value="${person.birthDate}"/>
+						<input type="submit" class="btn btn-primary" value=Submit>
+					</form> 
+				</div>
+				<% String show = (String) session.getAttribute("update"); %>
+				<script type="text/javascript">
+					if ('<%=show%>' == "true") {document.getElementById("updateformdiv").style.display = "block";}
+				</script> 							
+	        </div>
+        </div>
+    </section>  
+    
+    <!-- Delete Section -->
+    <section id="delete" class="container content-section text-center">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Delete an Identity</h2>
 		        <p>To delete an identity from the system, enter its unique ID.</p>
 		        <form class="form-horizontal" role="form" name="Deleteform" action="./Delete"method="post">
 					<input name="uid" type="text" class="form-control" id="uid" placeholder="Unique ID"/>
 					<input type="submit" class="btn btn-danger" value=Submit>
-				</form>	      
-	        </div>
+				</form>
+            </div>
         </div>
-    </section>    
+    </section>  
     
     <!-- Footer -->
     <footer>
@@ -215,9 +239,6 @@
 
     <!-- Plugin JavaScript -->
     <script src="grayscale/js/jquery.easing.min.js"></script>
-
-    <!-- Google Maps API Key - Use your own API key to enable the map feature. More information on the Google Maps API can be found at https://developers.google.com/maps/ -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRngKslUGJTlibkQ3FkfTxj3Xss1UlZDA&sensor=false"></script>
 
     <!-- Custom Theme JavaScript -->
     <script src="grayscale/js/grayscale.js"></script>

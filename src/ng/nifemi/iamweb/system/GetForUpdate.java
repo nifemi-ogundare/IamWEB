@@ -39,11 +39,15 @@ public class GetForUpdate extends SpringServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int uid = Integer.parseInt(request.getParameter("uid"));
-		
-		identityPerson = (Identity) hibernateDao.getById(uid);
-		request.getSession().setAttribute("person", identityPerson);
-		response.sendRedirect("update.jsp");
+		String idsString = request.getParameter("uid");
+		if (idsString == "") {
+		}else{
+			int uid = Integer.parseInt(request.getParameter("uid"));
+			
+			identityPerson = (Identity) hibernateDao.getById(uid);
+			request.getSession().setAttribute("person", identityPerson);
+			request.getSession().setAttribute("update", "true");
+		}
+		response.sendRedirect("page.jsp#update");
 	}
-
 }

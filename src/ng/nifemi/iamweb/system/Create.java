@@ -1,7 +1,9 @@
 package ng.nifemi.iamweb.system;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -51,12 +53,20 @@ public class Create extends SpringServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		identityPerson.setFullName(request.getParameter("fullName"));
-		identityPerson.setBirthDate(request.getParameter("birthDate"));
-		identityPerson.setEmail(request.getParameter("email"));
+		String fullName = request.getParameter("fullName");
+		String email = request.getParameter("email");
+		String birthDate = request.getParameter("birthDate");
 		
-		hibernateDao.save(identityPerson);
+		if (fullName =="" || email == "" || birthDate == "") { 
+		}else{
+			
+			identityPerson.setFullName(fullName);
+			identityPerson.setBirthDate(birthDate);
+			identityPerson.setEmail(email);
+			
+			hibernateDao.save(identityPerson);
+		}
 		
-		response.sendRedirect("page.jsp");
+		response.sendRedirect("page.jsp#create");
 	}
 }

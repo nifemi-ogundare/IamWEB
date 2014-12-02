@@ -9,12 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ng.nifemi.iamcore.authenticating.Authenticator;
+import ng.nifemi.iamweb.SpringServlet;
 
 /**
  * Servlet implementation class Login
  */
 @WebServlet("/Login")
-public class Login extends HttpServlet {
+public class Login extends SpringServlet {
 	private static final long serialVersionUID = 1L; 
        
     /**
@@ -54,7 +55,7 @@ public class Login extends HttpServlet {
 		if (authenticator.isAuthenticated()) {
 			response.sendRedirect("page.jsp");
 		}else{
-			response.sendRedirect("authError.jsp");
+			response.sendRedirect("index.jsp");
 			return;
 		}
 	}

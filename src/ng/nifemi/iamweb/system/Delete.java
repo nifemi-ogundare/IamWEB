@@ -37,12 +37,16 @@ public class Delete extends SpringServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int id = Integer.parseInt(request.getParameter("uid"));
-		
-		identityPerson.setId(id);
-		hibernateDao.delete(identityPerson);
-		
-		response.sendRedirect("page.jsp");
+		String idsString = request.getParameter("uid");
+		if (idsString == "") { 
+		}else{
+			int id = Integer.parseInt(request.getParameter("uid"));
+			
+			identityPerson.setId(id);
+			hibernateDao.delete(identityPerson);
+		}
+
+		response.sendRedirect("page.jsp#modify");
 	}
 
 }

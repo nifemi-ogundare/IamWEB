@@ -45,7 +45,7 @@ public class GetList extends SpringServlet {
 		List<Person> list = hibernateDao.getList();
 		
 		request.getSession().setAttribute("idList", list);
-		response.sendRedirect("page.jsp");
+		response.sendRedirect("page.jsp#list");
 	}
 
 	/**

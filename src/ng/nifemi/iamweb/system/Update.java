@@ -8,10 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ng.nifemi.iamcore.person.Person;
-import ng.nifemi.iamcore.person.PersonFactory;
-import ng.nifemi.iamcore.person.PersonFactory.ProductTypes;
-import ng.nifemi.iamcore.storage.HibernateDAO;
 import ng.nifemi.iamweb.SpringServlet;
 
 /**
@@ -41,16 +37,21 @@ public class Update extends SpringServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Person updatedPerson = PersonFactory.getInstance(ProductTypes.IDENTITY);
+		String fullName = request.getParameter("fullName");
+		String email = request.getParameter("email");
+		String birthDate = request.getParameter("birthDate");
 		
-		updatedPerson.setId(Integer.parseInt(request.getParameter("uid")));
-		updatedPerson.setFullName(request.getParameter("fullName"));
-		updatedPerson.setEmail(request.getParameter("email"));
-		updatedPerson.setBirthDate(request.getParameter("birthDate"));
-		
-		hibernateDao.update(updatedPerson);
-		
-		response.sendRedirect("home.jsp");
-	}
+		if (fullName =="" || email == "" || birthDate == "") { 
+		}else{
+			identityPerson.setId(Integer.parseInt(request.getParameter("uid")));
+			identityPerson.setFullName(request.getParameter("fullName"));
+			identityPerson.setEmail(request.getParameter("email"));
+			identityPerson.setBirthDate(request.getParameter("birthDate"));
+			
+			hibernateDao.update(identityPerson);
+			request.getSession().setAttribute("update", "false");
+		}
 
+		response.sendRedirect("page.jsp#update");
+	}
 }
