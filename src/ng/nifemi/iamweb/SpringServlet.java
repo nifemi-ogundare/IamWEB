@@ -6,7 +6,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
 import ng.nifemi.iamcore.person.Identity;
-import ng.nifemi.iamcore.storage.HibernateDAO;
+import ng.nifemi.iamcore.person.User;
+import ng.nifemi.iamcore.storage.IdentityDAO;
+import ng.nifemi.iamcore.storage.UserDAO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,13 +26,22 @@ public class SpringServlet extends HttpServlet {
 	
 	@Autowired
 	protected
-	HibernateDAO hibernateDao;
+	IdentityDAO identityDao;
 	
 	@Autowired
 	@Qualifier("fakeId")
 	protected
 	Identity identityPerson;
-       
+	
+	@Autowired
+	protected
+    UserDAO userDao;
+	
+	@Autowired
+	@Qualifier("newUser")
+	protected
+	User newUser;
+	     
     /**
      * @see HttpServlet#HttpServlet()
      */

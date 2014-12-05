@@ -1,7 +1,6 @@
 package ng.nifemi.iamweb.system;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,16 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.SessionFactory;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-
-import ng.nifemi.iamcore.configuration.Configuration;
-import ng.nifemi.iamcore.person.Identity;
 import ng.nifemi.iamcore.person.Person;
-import ng.nifemi.iamcore.storage.DAO;
-import ng.nifemi.iamcore.storage.DerbyDAO;
-import ng.nifemi.iamcore.storage.HibernateDAO;
 import ng.nifemi.iamweb.SpringServlet;
 
 /**
@@ -42,7 +32,7 @@ public class GetList extends SpringServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		List<Person> list = hibernateDao.getList();
+		List<Person> list = identityDao.getList();
 		
 		request.getSession().setAttribute("idList", list);
 		response.sendRedirect("page.jsp#list");

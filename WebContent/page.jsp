@@ -54,10 +54,8 @@
                     <li class="hidden"><a href="#page-top"></a></li>
                     <li><a class="page-scroll" href="#about">About</a></li>
                     <li><a class="page-scroll" href="#create">Create</a></li>
-                    <li><a class="page-scroll" href="#search">Search</a></li>
-                    <li><a class="page-scroll" href="#list">List</a></li>       
-                    <li><a class="page-scroll" href="#update">Update</a></li>
-                    <li><a class="page-scroll" href="#delete">Delete</a></li>    
+                    <li><a class="page-scroll" href="#list">List</a></li>                     
+                    <li><a class="page-scroll" href="#search">Search</a></li>       
                     <li><a href="exit.jsp">Exit</a></li>                            
                 </ul>
             </div>
@@ -73,7 +71,7 @@
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
                         <h1 class="brand-heading">IAM System</h1>
-                        <p class="intro-text">Welcome, <%=session.getAttribute("login") %><br>Created by Nifemi Ogundare</p>
+                        <p class="intro-text">Welcome, <%=session.getAttribute("login") %></p>
                         <a href="#about" class="btn btn-circle page-scroll">
                             <i class="fa fa-angle-double-down animated"></i>
                         </a>
@@ -87,10 +85,12 @@
     <section id="about" class="container content-section text-center">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
-                <h2>About Grayscale</h2>
-                <p>Grayscale is a free Bootstrap 3 theme created by Start Bootstrap. It can be yours right now, simply download the template on <a href="http://startbootstrap.com/template-overviews/grayscale/">the preview page</a>. The theme is open source, and you can use it for any purpose, personal or commercial.</p>
-                <p>This theme features stock photos by <a href="http://gratisography.com/">Gratisography</a> along with a custom Google Maps skin courtesy of <a href="http://snazzymaps.com/">Snazzy Maps</a>.</p>
-                <p>Grayscale includes full HTML, CSS, and custom JavaScript files along with LESS files for easy customization.</p>
+                <h2>How to use The IAM System</h2>
+                <p>Use the system to store Identity information: full name, email, and birth date.<br>
+                The Create section allows you to save a new identity<br>
+                The List section lets you see a list of all identities in the database<br>
+                The search section lets you find a specific identity, and update or delete it. 
+                After any modification attempt, You will see a message on screen indicating the success/failure of your last attempt.</p>
             </div>
         </div>
     </section>
@@ -100,51 +100,23 @@
         <div class="row">
 	        <div class="col-lg-8 col-lg-offset-2">
 	            <h2>Create an Identity</h2>
-		        <p>To create a new identity, enter name, email address, and date of birth below</p>
-				<form class="form-horizontal" role="form" name="Createform" action="./Create"method="post">
-					<input name="fullName" type="text" class="form-control" id="fullName" placeholder="Full name"/>
-					<input name="email" type="email" class="form-control" id="email" placeholder="Email address" />
-					<input name="birthDate" type="date" class="form-control" id="birthDate"/>
-					<input type="submit" class="btn btn-primary" value=Submit>
-				</form>
+	            <div>
+			        <p>To create a new identity, enter name, email address, and date of birth below</p>
+					<form class="form-horizontal" role="form" name="Createform" action="./Create"method="post">
+						<input name="fullName" type="text" class="form-control" id="fullName" placeholder="Full name"/>
+						<input name="email" type="email" class="form-control" id="email" placeholder="Email address" />
+						<input name="birthDate" type="date" class="form-control" id="birthDate"/>
+						<input type="submit" class="btn btn-default btn-lg" value=Submit>
+					</form>
+				</div>
+	            <div id="createmessage" style="display:none">
+	            	<p>Your last attempt to create an identity <%=session.getAttribute("createStatus")%></p>
+	            </div>				
+				<% String showCreateMessage = (String) session.getAttribute("createStatus"); %>
+				<script type="text/javascript">
+					if ('<%=showCreateMessage%>' != "null") {document.getElementById("createmessage").style.display = "block";}
+				</script> 				
 	        </div>
-        </div>
-    </section>
-
-    <!-- Search Section -->
-    <section id="search" class="container content-section text-center">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2">
-                <h2>Search for Identities</h2>
-		        <p>Enter a full name, an email, and/or a birth date</p>
-				<form class="form-horizontal" role="form" name="Searchform" action="./Search"method="post">
-					<input name="fullName" type="text" class="form-control" id="fullName" placeholder="Full name"/>
-					<input name="email" type="email" class="form-control" id="email" placeholder="Email address" />
-					<input name="birthDate" type="date" class="form-control" id="birthDate"/>
-					<input type="submit" class="btn btn-primary" value=Submit>
-				</form>				
-				<p>Results of your search:</p>	    
-				<form name="Resultsform">
-				  		 <div>
-				      		 <table class="table">
-				          		<tr>
-				                <th>Unique ID</th>
-				                <th>Full Name</th>
-				                <th>Email</th>
-				                <th>Birth Year</th>
-				            </tr>
-				          		<c:forEach var="identity" items="${results}">
-				                <tr>
-				                    <td><c:out value="${identity.id}" /></td>
-				                    <td><c:out value="${identity.fullName}" /></td>
-				                    <td><c:out value="${identity.email}" /></td>
-				                    <td><c:out value="${identity.birthDate}" /></td>
-				                </tr>
-				           	</c:forEach>
-				       	</table>
-				   	</div>
-				</form>	
-            </div>
         </div>
     </section>
 
@@ -153,6 +125,9 @@
         <div class="row">
 	        <div class="col-lg-8 col-lg-offset-2">
 	            <h2>Full List of Identities</h2>
+				<form class="form-horizontal" role="form" name="listRefreshform" action="./GetList"method="post">
+					<input type="submit" class="btn btn-default btn-lg" value="Refresh List">
+				</form>		            
 				<form name="Listform">
 		   		 <div>
 					<table class="table table-bordered">
@@ -172,26 +147,73 @@
 		            	</c:forEach>
 		        	</table>
 		    	 </div>
-				</form>	
-				<form class="form-horizontal" role="form" name="listRefreshform" action="./GetList"method="post">
-					<input type="submit" class="btn btn-primary" value="Refresh List">
 				</form>					
 	        </div>
         </div>
+    </section>  
+    
+    <!-- Search Section -->
+    <section id="search" class="container content-section text-center">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h2>Search for Identities</h2>
+		        <p>Enter a full name, an email, and/or a birth date</p>
+				<form class="form-horizontal" role="form" name="Searchform" action="./Search"method="post">
+					<input name="fullName" type="text" class="form-control" id="fullName" placeholder="Full name"/>
+					<input name="email" type="email" class="form-control" id="email" placeholder="Email address" />
+					<input name="birthDate" type="date" class="form-control" id="birthDate"/>
+					<input type="submit" class="btn btn-default btn-lg" value=Submit>
+				</form>		
+				<div id="searchresults" style="display:none" >		
+					<p>Results of your search:</p>	    
+					<form role="form" name="Resultsform" action="./Get"method="post">
+					  	<div>
+					      	<table class="table">
+					          	<tr>
+					          		<th></th>
+					                <th>Unique ID</th>
+					                <th>Full Name</th>
+					                <th>Email</th>
+					                <th>Birth Year</th>
+					            </tr>
+					          	<c:forEach var="identity" items="${results}">
+					                <tr>
+					                	<td><input type="radio" name="selectedId" value="${identity.id}"></td>
+					                    <td><c:out value="${identity.id}" /></td>
+					                    <td><c:out value="${identity.fullName}" /></td>
+					                    <td><c:out value="${identity.email}" /></td>
+					                    <td><c:out value="${identity.birthDate}" /></td>
+					                </tr>
+					           	</c:forEach>
+					       	</table>
+					   	</div>
+					    <button class="btn btn-default btn-lg" name="updatebutton" type="submit">Update</button>
+					    <button class="btn btn-default btn-lg" name="deletebutton" type="submit">Delete</button>	   	
+					</form>	
+				</div>
+	            <div id="deletemessage" style="display:none">
+	            	<p>Your last attempt to delete an identity <%=session.getAttribute("deleteStatus")%></p>
+	            </div>		
+	            <div id="updatemessage" style="display:none">
+	            	<p>Your last attempt to update an identity <%=session.getAttribute("updateStatus")%></p>
+	            </div>
+	            <% String showSearchResults = (String) session.getAttribute("searchDone"); %>		 
+				<% String showUpdateMessage = (String) session.getAttribute("updateStatus"); %>	
+				<% String showDeleteMessage = (String) session.getAttribute("deleteStatus"); %>	
+				<script type="text/javascript">
+					if ('<%=showUpdateMessage%>' != "null") {document.getElementById("updatemessage").style.display = "block";}
+					if ('<%=showDeleteMessage%>' != "null") {document.getElementById("deletemessage").style.display = "block";}
+					if ('<%=showSearchResults%>' != "null") {document.getElementById("searchresults").style.display = "block";}				
+				</script>								                       			
+            </div>
+        </div>
     </section>
     
-    <!-- Update Section -->
-    <section id="update" class="content-section text-center">
+     
+    <!-- Modification Section -->
+    <section id="modify" class="content-section text-center">
         <div class="row">
 	        <div class="col-lg-8 col-lg-offset-2">
-	            <h2>Update an Identity</h2>
-				<div id="updatediv">
-			        <p>To update an identity, enter its unique ID.</p>       
-			        <form class="form-horizontal" role="form" name="GetUpdateform" action="./GetForUpdate"method="post">
-						<input name="uid" type="text" class="form-control" id="uid" placeholder="Unique ID"/>
-						<input type="submit" class="btn btn-primary" value=Submit onclick="myFunction()"> 
-					</form>						
-				</div>
 				<div id="updateformdiv" style="display:none">
                     <p>Update the identity information below:</p>
 					<form class="form-horizontal" role="form" name="Updateform" action="./Update"method="post">
@@ -199,35 +221,40 @@
 						<input name="fullName" type="text" class="form-control" id="fullName" value="${person.fullName}"/>
 						<input name="email" type="email" class="form-control" id="email" value="${person.email}"/>
 						<input name="birthDate" type="date" class="form-control" id="birthDate" value="${person.birthDate}"/>
-						<input type="submit" class="btn btn-primary" value=Submit>
+						<input type="submit" class="btn btn-default btn-lg" value=Submit>
 					</form> 
-				</div>
-				<% String show = (String) session.getAttribute("update"); %>
+				</div>	
+				<div id="deleteformdiv" style="display:none">
+                    <p>Are you sure you want to delete the identity below?</p>
+					<form class="form-horizontal" role="form" name="Deleteform" action="./Delete"method="post">
+				    	<input name="uid" type="text" class="form-control" id="uid" value="${persontodelete.id}" readonly/>
+						<input name="fullName" type="text" class="form-control" id="fullName" value="${persontodelete.fullName}"/>
+						<input name="email" type="email" class="form-control" id="email" value="${persontodelete.email}"/>
+						<input name="birthDate" type="date" class="form-control" id="birthDate" value="${persontodelete.birthDate}"/>
+						<input type="submit" class="btn btn-danger btn-lg" name="confirmbutton" value=Confirm>
+						<input type="submit" class="btn btn-default btn-lg" name="cancelbutton" value=Cancel>
+					</form> 
+				</div>							
+				<% String showDeleteOngoing = (String) session.getAttribute("deleteOngoing"); %>
+				<% String showUpdateOngoing = (String) session.getAttribute("updateOngoing"); %>				
 				<script type="text/javascript">
-					if ('<%=show%>' == "true") {document.getElementById("updateformdiv").style.display = "block";}
+					if ('<%=showDeleteOngoing%>' == "true") {document.getElementById("deleteformdiv").style.display = "block";}
+					if ('<%=showUpdateOngoing%>' == "true") {document.getElementById("updateformdiv").style.display = "block";}
 				</script> 							
 	        </div>
         </div>
-    </section>  
-    
-    <!-- Delete Section -->
-    <section id="delete" class="container content-section text-center">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2">
-                <h2>Delete an Identity</h2>
-		        <p>To delete an identity from the system, enter its unique ID.</p>
-		        <form class="form-horizontal" role="form" name="Deleteform" action="./Delete"method="post">
-					<input name="uid" type="text" class="form-control" id="uid" placeholder="Unique ID"/>
-					<input type="submit" class="btn btn-danger" value=Submit>
-				</form>
-            </div>
-        </div>
-    </section>  
+    </section>     
     
     <!-- Footer -->
     <footer>
         <div class="container text-center">
-            <p>Copyright &copy; IAM system 2014</p>
+            <h4><strong>IAM System</strong></h4>
+            <p>Created by Nifemi Ogundare</p>
+            <ul class="list-unstyled">
+            <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:nifemi.ogundare@gmail.com">nifemi.ogundare@gmail.com</a>
+            </li>
+            </ul>
+            <p>Copyright &copy; EPITA 2014</p>
         </div>
     </footer>
 

@@ -1,7 +1,6 @@
 package ng.nifemi.iamweb.system;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,14 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-
-import ng.nifemi.iamcore.configuration.Configuration;
-import ng.nifemi.iamcore.person.Identity;
 import ng.nifemi.iamcore.person.Person;
-import ng.nifemi.iamcore.storage.DAO;
-import ng.nifemi.iamcore.storage.DerbyDAO;
 import ng.nifemi.iamweb.SpringServlet;
 
 /**
@@ -51,8 +43,9 @@ public class Search extends SpringServlet {
 		identityPerson.setBirthDate(request.getParameter("birthDate"));
 		identityPerson.setEmail(request.getParameter("email"));
 		
-		List<Person> list = hibernateDao.search(identityPerson);
+		List<Person> list = identityDao.search(identityPerson);
 		
+		request.getSession().setAttribute("searchDone", "true");
 		request.getSession().setAttribute("results", list);
 		response.sendRedirect("page.jsp#search");
 	}

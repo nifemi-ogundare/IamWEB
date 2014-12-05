@@ -39,14 +39,24 @@ public class Delete extends SpringServlet {
 		
 		String idsString = request.getParameter("uid");
 		if (idsString == "") { 
+			request.getSession().setAttribute("deleteStatus", "Failed.");
+			request.getSession().setAttribute("deleteOngoing", "false");
 		}else{
-			int id = Integer.parseInt(request.getParameter("uid"));
+			int id = Integer.parseInt(idsString);
 			
-			identityPerson.setId(id);
-			hibernateDao.delete(identityPerson);
+			if (request.getParameter("confirmbutton") != null) {
+				identityPerson.setId(id);
+				identityDao.delete(identityPerson);
+				request.getSession().setAttribute("deleteStatus", "Succeeded.");
+				request.getSession().setAttribute("deleteOngoing", "false");
+			}
+			
+			if (request.getParameter("cancelbutton") != null) {
+				request.getSession().setAttribute("deleteStatus", "Failed.");
+				request.getSession().setAttribute("deleteOngoing", "false");
+			} 
 		}
-
-		response.sendRedirect("page.jsp#modify");
+		response.sendRedirect("page.jsp#search");
 	}
 
 }

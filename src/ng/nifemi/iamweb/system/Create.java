@@ -1,28 +1,12 @@
 package ng.nifemi.iamweb.system;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-
-import ng.nifemi.iamcore.configuration.Configuration;
-import ng.nifemi.iamcore.person.Identity;
-import ng.nifemi.iamcore.person.Person;
-import ng.nifemi.iamcore.person.PersonFactory;
-import ng.nifemi.iamcore.person.PersonFactory.ProductTypes;
-import ng.nifemi.iamcore.storage.DAO;
-import ng.nifemi.iamcore.storage.DerbyDAO;
-import ng.nifemi.iamcore.storage.HibernateDAO;
 import ng.nifemi.iamweb.SpringServlet;
 
 /**
@@ -58,13 +42,15 @@ public class Create extends SpringServlet {
 		String birthDate = request.getParameter("birthDate");
 		
 		if (fullName =="" || email == "" || birthDate == "") { 
+			request.getSession().setAttribute("createStatus", "failed.");
 		}else{
 			
 			identityPerson.setFullName(fullName);
 			identityPerson.setBirthDate(birthDate);
 			identityPerson.setEmail(email);
 			
-			hibernateDao.save(identityPerson);
+			identityDao.save(identityPerson);
+			request.getSession().setAttribute("createStatus", "succeeded.");
 		}
 		
 		response.sendRedirect("page.jsp#create");

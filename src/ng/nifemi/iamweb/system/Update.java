@@ -40,18 +40,22 @@ public class Update extends SpringServlet {
 		String fullName = request.getParameter("fullName");
 		String email = request.getParameter("email");
 		String birthDate = request.getParameter("birthDate");
+		String idsString = request.getParameter("uid");
 		
-		if (fullName =="" || email == "" || birthDate == "") { 
+		if (idsString == "" || fullName == "" || email == "" || birthDate == "") { 
+			request.getSession().setAttribute("updateOngoing", "false");			
+			request.getSession().setAttribute("updateStatus", "Failed.");
 		}else{
-			identityPerson.setId(Integer.parseInt(request.getParameter("uid")));
-			identityPerson.setFullName(request.getParameter("fullName"));
-			identityPerson.setEmail(request.getParameter("email"));
-			identityPerson.setBirthDate(request.getParameter("birthDate"));
+			identityPerson.setId(Integer.parseInt(idsString));
+			identityPerson.setFullName(fullName);
+			identityPerson.setEmail(email);
+			identityPerson.setBirthDate(birthDate);
 			
-			hibernateDao.update(identityPerson);
-			request.getSession().setAttribute("update", "false");
+			identityDao.update(identityPerson);
+			request.getSession().setAttribute("updateOngoing", "false");
+			request.getSession().setAttribute("updateStatus", "Succeeded.");			
 		}
 
-		response.sendRedirect("page.jsp#update");
+		response.sendRedirect("page.jsp#search");
 	}
 }
